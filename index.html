@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#764ba2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Family RPG - Trò Chơi Gia Đình</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkZhbWlseSBSUEcgLSBUcsOyIENoxqFpIEdpYSDEkMOsbmgiLAogICJzaG9ydF9uYW1lIjogIkZhbWlseSBSUEciLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzc2NGJhMiIsCiAgInRoZW1lX2NvbG9yIjogIiM3NjRiYTIiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInPjxyZWN0IGZpbGw9JyM3NjRiYTInIHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJy8+PHRleHQgeT0nMzIwJyBmb250LXNpemU9JzI1MCcgZmlsbD0nd2hpdGUnIHRleHQtYW5jaG9yPSdtaWRkbGUnIHg9JzI1Nic+8J+OriA8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23764ba2' width='100' height='100'/><text y='70' font-size='60' fill='white' text-anchor='middle' x='50'>🎮</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23764ba2' width='100' height='100'/><text y='70' font-size='60' fill='white' text-anchor='middle' x='50'>🎮</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 15px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .player-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .title-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .title-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .title-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .skill-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .skill-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .task-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .task-list {
+            display: none;
+        }
+
+        .task-list.active {
+            display: block;
+        }
+
+        .task-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .task-item.completed {
+            background: #d4edda;
+            opacity: 0.7;
+        }
+
+        .task-item.completed .task-info {
+            text-decoration: line-through;
+        }
+
+        .task-info {
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .task-info h4 {
+            font-size: 0.95em;
+            margin-bottom: 3px;
+        }
+
+        .task-info p {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .task-rewards {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .reward {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .complete-btn, .undo-btn {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .complete-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .complete-btn:disabled {
+            background: #6c757d;
+        }
+
+        .undo-btn {
+            background: #6c757d;
+            color: white;
+            padding: 6px 10px;
+        }
+
+        .reward-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .reward-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .reward-card h4 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .reward-card p {
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .reward-price {
+            font-size: 1em;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 8px 0;
+        }
+
+        .buy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .buy-btn:disabled {
+            background: #6c757d;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #666;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn span {
+            font-size: 1.5em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .edit-form {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .save-btn, .cancel-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .level-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        .level-item.current {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        .title-status.achieved {
+            background: #28a745;
+            color: white;
+        }
+
+        .title-status.locked {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* PWA Install Prompt */
+        .install-prompt {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 200;
+        }
+
+        .install-prompt h3 {
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .install-prompt p {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .install-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn, .dismiss-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .install-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .dismiss-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+                margin: 0 auto;
+            }
+            
+            .player-info {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .reward-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @keyframes levelUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .level-up-animation {
+            animation: levelUp 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>🎮 Trò Chơi Nhập Vai Gia Đình</h1>
+            <div class="player-info">
+                <div class="info-card">
+                    <h3>Cấp Độ</h3>
+                    <div class="value" id="playerLevel">Tân binh nhí</div>
+                </div>
+                <div class="info-card">
+                    <h3>Kinh Nghiệm</h3>
+                    <div class="value"><span id="playerExp">0</span></div>
+                </div>
+                <div class="info-card">
+                    <h3>Vàng</h3>
+                    <div class="value">💰 <span id="playerGold">0</span></div>
+                </div>
+                <div class="info-card">
+                    <h3>Chuỗi</h3>
+                    <div class="value">🔥 <span id="streakDays">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content sections will be shown/hidden based on navigation -->
+        <div id="content">
+            <!-- Tasks Section -->
+            <div id="tasksSection" class="content-section">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Nhiệm Vụ</h2>
+                        <button class="edit-btn" onclick="toggleEditTasks()">✏️ Sửa</button>
+                    </div>
+                    <div id="editTasksForm" class="edit-form"></div>
+                    <div class="task-tabs">
+                        <button class="tab-btn active" onclick="switchTab('daily')">Hàng Ngày</button>
+                        <button class="tab-btn" onclick="switchTab('weekly')">Hàng Tuần</button>
+                        <button class="tab-btn" onclick="switchTab('monthly')">Hàng Tháng</button>
+                    </div>
+                    <div id="dailyTasks" class="task-list active"></div>
+                    <div id="weeklyTasks" class="task-list"></div>
+                    <div id="monthlyTasks" class="task-list"></div>
+                </div>
+            </div>
+
+            <!-- Titles Section -->
+            <div id="titlesSection" class="content-section" style="display: none;">
+                <div class="section">
+                    <h2>Danh Hiệu Hiện Tại</h2>
+                    <div id="titleCards"></div>
+                </div>
+                <div class="section">
+                    <h2>Tất Cả Danh Hiệu</h2>
+                    <div id="allTitles"></div>
+                </div>
+            </div>
+
+            <!-- Rewards Section -->
+            <div id="rewardsSection" class="content-section" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Phần Thưởng</h2>
+                        <button class="edit-btn" onclick="toggleEditRewards()">✏️ Sửa</button>
+                    </div>
+                    <div id="editRewardsForm" class="edit-form"></div>
+                    <div class="reward-grid" id="rewardGrid"></div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progressSection" class="content-section" style="display: none;">
+                <div class="section">
+                    <h2>Bảng Cấp Độ</h2>
+                    <div id="allLevels"></div>
+                </div>
+                <div class="section" style="text-align: center;">
+                    <h2>Cài Đặt</h2>
+                    <button class="skill-btn" style="background: #dc3545; padding: 12px 24px; font-size: 1em; margin-top: 15px;" onclick="resetGame()">
+                        🔄 Khởi Tạo Lại Dữ Liệu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="showSection('tasksSection', this)">
+            <span>📋</span>
+            <small>Nhiệm vụ</small>
+        </button>
+        <button class="nav-btn" onclick="showSection('titlesSection', this)">
+            <span>🏆</span>
+            <small>Danh hiệu</small>
+        </button>
+        <button class="nav-btn" onclick="showSection('rewardsSection', this)">
+            <span>🎁</span>
+            <small>Phần thưởng</small>
+        </button>
+        <button class="nav-btn" onclick="showSection('progressSection', this)">
+            <span>📊</span>
+            <small>Tiến độ</small>
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalText"></p>
+            <button class="close-btn" onclick="closeModal()">Đóng</button>
+        </div>
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <h3>Cài đặt ứng dụng</h3>
+        <p>Thêm vào màn hình chính để truy cập nhanh hơn!</p>
+        <div class="install-actions">
+            <button class="install-btn" onclick="installPWA()">Cài đặt</button>
+            <button class="dismiss-btn" onclick="dismissInstall()">Để sau</button>
+        </div>
+    </div>
+
+    <script>
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
+                self.addEventListener('install', e => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `));
+        }
+
+        // PWA Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!localStorage.getItem('installDismissed')) {
+                document.getElementById('installPrompt').style.display = 'block';
+            }
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').style.display = 'none';
+                });
+            }
+        }
+
+        function dismissInstall() {
+            localStorage.setItem('installDismissed', 'true');
+            document.getElementById('installPrompt').style.display = 'none';
+        }
+
+        // Navigation
+        function showSection(sectionId, btn) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(navBtn => {
+                navBtn.classList.remove('active');
+            });
+            btn.classList.add('active');
+        }
+
+        // Game State
+        let gameState = {
+            playerExp: 0,
+            playerGold: 0,
+            streakDays: 0,
+            currentLevel: 'Tân binh nhí',
+            currentTitles: [],
+            completedTasks: {
+                daily: [],
+                weekly: [],
+                monthly: []
+            },
+            lastPlayDate: new Date().toDateString(),
+            titleProgress: {
+                disciplineStreak: 0,
+                creativeDays: 0,
+                explorerWeek: false,
+                knightHelps: true
+            }
+        };
+
+        // Title definitions
+        const titles = [
+            {
+                id: 'discipline',
+                name: 'Chiến Binh Kỷ Luật',
+                description: 'Chiến binh với tinh thần kỷ luật cao độ',
+                condition: 'Hoàn thành 100% nhiệm vụ hàng ngày trong 3 ngày liên tiếp',
+                image: '🛡️',
+                skills: [
+                    {
+                        name: 'Kỷ luật là sức mạnh',
+                        effect: '+5 XP cho mỗi nhiệm vụ'
+                    },
+                    {
+                        name: 'Siêu tập trung',
+                        effect: 'x2 phần thưởng cho 1 nhiệm vụ/ngày'
+                    }
+                ]
+            },
+            {
+                id: 'creative',
+                name: 'Pháp Sư Sáng Tạo',
+                description: 'Yêu thích nghệ thuật và sáng tạo',
+                condition: 'Vẽ tranh hoặc viết văn mỗi ngày',
+                image: '🎨',
+                skills: [
+                    {
+                        name: 'Yêu nghệ thuật',
+                        effect: '+5 XP khi sáng tạo'
+                    },
+                    {
+                        name: 'Giá trị nghệ thuật',
+                        effect: 'Đổi 1 tác phẩm = 5 vàng/ngày'
+                    }
+                ]
+            },
+            {
+                id: 'explorer',
+                name: 'Nhà Thám Hiểm',
+                description: 'Luôn thích tìm tòi khám phá',
+                condition: 'Học kĩ năng mới mỗi tuần',
+                image: '🔍',
+                skills: [
+                    {
+                        name: 'Thợ săn kho báu',
+                        effect: '+5 vàng nhiệm vụ ngoài trời'
+                    },
+                    {
+                        name: 'Không ngại thất bại',
+                        effect: 'Bỏ qua 1 nhiệm vụ không mất chuỗi'
+                    }
+                ]
+            },
+            {
+                id: 'knight',
+                name: 'Hiệp Sĩ Giúp Đỡ',
+                description: 'Giúp đỡ người khác là niềm vui',
+                condition: 'Hoàn thành mọi yêu cầu giúp đỡ',
+                image: '⚔️',
+                skills: [
+                    {
+                        name: 'Lá chắn gia đình',
+                        effect: 'Tự tạo nhiệm vụ +5 XP +5 vàng'
+                    },
+                    {
+                        name: 'Đôi bạn thân',
+                        effect: 'Làm cùng bố mẹ 1 nhiệm vụ'
+                    }
+                ]
+            }
+        ];
+
+        // Task definitions
+        let tasks = {
+            daily: [
+                { id: 'd1', name: 'Kỷ luật', description: 'Tuân thủ thời gian biểu', exp: 10, gold: 10 },
+                { id: 'd2', name: 'Học tập', description: 'Học bài và làm bài tập', exp: 5, gold: 5 },
+                { id: 'd3', name: 'Rèn luyện', description: 'Đọc sách/Vẽ/Giải đố', exp: 10, gold: 10 },
+                { id: 'd4', name: 'Dọn dẹp', description: 'Dọn phòng, bàn học', exp: 5, gold: 5 },
+                { id: 'd5', name: 'Giúp đỡ', description: 'Giúp việc nhà', exp: 10, gold: 10 },
+                { id: 'd6', name: 'Trông em', description: 'Chơi với em 30 phút', exp: 5, gold: 5 },
+                { id: 'd7', name: 'Thưởng chuỗi', description: 'Hoàn thành tất cả', exp: 5, gold: 5 }
+            ],
+            weekly: [
+                { id: 'w1', name: 'Học nâng cao', description: 'Tự học kiến thức mới', exp: 10, gold: 10 },
+                { id: 'w2', name: 'Luyện kỹ năng', description: 'Luyện tập 1 buổi', exp: 15, gold: 15 },
+                { id: 'w3', name: 'Tự giác', description: 'Dọn nhà, chăm cây', exp: 20, gold: 20 },
+                { id: 'w4', name: 'Thưởng tuần', description: 'Hoàn thành tất cả', exp: 10, gold: 10 }
+            ],
+            monthly: [
+                { id: 'm1', name: 'Sáng tạo', description: 'Viết/vẽ điều đặc biệt', exp: 20, gold: 20 },
+                { id: 'm2', name: 'Tự đánh giá', description: 'Đánh giá tiến độ', exp: 10, gold: 10 },
+                { id: 'm3', name: 'Đọc sách', description: 'Đọc hết 1 cuốn', exp: 50, gold: 50 },
+                { id: 'm4', name: 'Thưởng tháng', description: 'Hoàn thành tất cả', exp: 15, gold: 15 }
+            ]
+        };
+
+        // Level definitions
+        const levels = [
+            { name: 'Tân binh nhí', expRequired: 0 },
+            { name: 'Bước chân nhỏ', expRequired: 200 },
+            { name: 'Công chúa chăm chỉ', expRequired: 400 },
+            { name: 'Chiến binh tập sự', expRequired: 600 },
+            { name: 'Trợ lý đắc lực', expRequired: 800 },
+            { name: 'Hiệp sĩ trách nhiệm', expRequired: 1000 },
+            { name: 'Nữ tướng kỷ luật', expRequired: 1200 },
+            { name: 'Thủ lĩnh sáng tạo', expRequired: 1400 },
+            { name: 'Nữ hoàng việc tốt', expRequired: 1600 },
+            { name: 'Siêu nhân giúp đỡ', expRequired: 1800 },
+            { name: 'Bậc thầy chinh phục', expRequired: 2000 },
+            { name: 'Người truyền cảm hứng', expRequired: 2200 },
+            { name: 'Huyền thoại gia đình', expRequired: 2400 }
+        ];
+
+        // Rewards
+        let rewards = [
+            { name: 'Đồ chơi nhỏ', description: 'Sticker, kẹo', cost: 500 },
+            { name: 'Thời gian giải trí', description: '+20 phút game', cost: 500 },
+            { name: 'Bữa ăn yêu thích', description: 'Món ăn tùy chọn', cost: 500 },
+            { name: 'Xem phim', description: 'Một bộ phim dài', cost: 1000 },
+            { name: 'Đi chơi', description: 'Chuyến đi trong ngày', cost: 1000 },
+            { name: 'Ngủ cùng bố mẹ', description: 'Một đêm đặc biệt', cost: 1000 },
+            { name: 'Đồ chơi vừa', description: 'Truyện, gấu bông', cost: 1000 },
+            { name: 'Hoạt động cùng', description: 'Làm gì đó cùng nhau', cost: 1000 },
+            { name: 'Game/Đồ chơi lớn', description: 'Dưới 500k', cost: 3000 },
+            { name: 'Ngày đặc biệt', description: 'Chọn hoạt động cả ngày', cost: 5000 },
+            { name: 'Du lịch', description: 'Chuyến đi xa', cost: 7000 }
+        ];
+
+        // Load game state
+        function loadGameState() {
+            const saved = localStorage.getItem('familyRPGState');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                const today = new Date().toDateString();
+                if (gameState.lastPlayDate !== today) {
+                    gameState.completedTasks.daily = [];
+                    gameState.lastPlayDate = today;
+                    checkTaskResets();
+                }
+            }
+            
+            const savedTasks = localStorage.getItem('customTasks');
+            if (savedTasks) {
+                Object.assign(tasks, JSON.parse(savedTasks));
+            }
+            
+            const savedRewards = localStorage.getItem('customRewards');
+            if (savedRewards) {
+                rewards = JSON.parse(savedRewards);
+            }
+            
+            updateUI();
+        }
+
+        // Save game state
+        function saveGameState() {
+            localStorage.setItem('familyRPGState', JSON.stringify(gameState));
+        }
+
+        // Update UI
+        function updateUI() {
+            document.getElementById('playerExp').textContent = gameState.playerExp;
+            document.getElementById('playerGold').textContent = gameState.playerGold;
+            document.getElementById('streakDays').textContent = gameState.streakDays;
+            document.getElementById('playerLevel').textContent = gameState.currentLevel;
+            
+            updateTitles();
+            updateTasks();
+            updateRewards();
+            updateAllTitles();
+            updateAllLevels();
+            checkLevelUp();
+            checkTitleConditions();
+        }
+
+        // Update titles display
+        function updateTitles() {
+            const titleCards = document.getElementById('titleCards');
+            titleCards.innerHTML = '';
+            
+            if (gameState.currentTitles.length === 0) {
+                titleCards.innerHTML = '<p style="text-align: center; color: #666;">Chưa có danh hiệu. Hoàn thành nhiệm vụ để đạt!</p>';
+                return;
+            }
+            
+            gameState.currentTitles.forEach(titleId => {
+                const title = titles.find(t => t.id === titleId);
+                if (title) {
+                    const card = document.createElement('div');
+                    card.className = 'title-card';
+                    card.innerHTML = `
+                        <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='70' font-size='60' text-anchor='middle' x='50'>${title.image}</text></svg>" alt="${title.name}">
+                        <div class="title-info">
+                            <h3>${title.name}</h3>
+                            <p style="font-size: 0.85em; color: #666;">${title.description}</p>
+                            <div class="skill-buttons">
+                                ${title.skills.map(skill => `
+                                    <button class="skill-btn" onclick="useSkill('${titleId}', '${skill.name}')">${skill.name}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    titleCards.appendChild(card);
+                }
+            });
+        }
+
+        // Update all titles
+        function updateAllTitles() {
+            const container = document.getElementById('allTitles');
+            container.innerHTML = '';
+            
+            titles.forEach(title => {
+                const hasTitle = gameState.currentTitles.includes(title.id);
+                const card = document.createElement('div');
+                card.className = 'title-card';
+                card.style.opacity = hasTitle ? '1' : '0.7';
+                card.innerHTML = `
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='70' font-size='60' text-anchor='middle' x='50'>${title.image}</text></svg>">
+                    <div class="title-info" style="flex: 1;">
+                        <h3>${title.name}</h3>
+                        <p style="font-size: 0.8em; margin: 5px 0;"><strong>Điều kiện:</strong> ${title.condition}</p>
+                        <div style="margin-top: 10px;">
+                            <strong style="color: #667eea;">Kỹ năng:</strong>
+                            ${title.skills.map(skill => `
+                                <div style="background: rgba(102, 126, 234, 0.1); padding: 8px; border-radius: 6px; margin: 5px 0;">
+                                    <strong style="color: #764ba2; font-size: 0.85em;">${skill.name}:</strong>
+                                    <span style="font-size: 0.8em;">${skill.effect}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="title-status ${hasTitle ? 'achieved' : 'locked'}">
+                            ${hasTitle ? '✓ Đã đạt được' : '🔒 Chưa mở khóa'}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Update tasks display
+        function updateTasks() {
+            ['daily', 'weekly', 'monthly'].forEach(type => {
+                const container = document.getElementById(`${type}Tasks`);
+                container.innerHTML = '';
+                
+                tasks[type].forEach(task => {
+                    const isCompleted = gameState.completedTasks[type].includes(task.id);
+                    const taskEl = document.createElement('div');
+                    taskEl.className = `task-item ${isCompleted ? 'completed' : ''}`;
+                    taskEl.innerHTML = `
+                        <div class="task-info">
+                            <h4>${task.name}</h4>
+                            <p>${task.description}</p>
+                        </div>
+                        <div class="task-rewards">
+                            <div>
+                                <span class="reward">📚 ${task.exp} XP</span>
+                                <span class="reward">💰 ${task.gold}</span>
+                            </div>
+                            <div class="task-actions">
+                                <button class="complete-btn" onclick="completeTask('${type}', '${task.id}')" ${isCompleted ? 'disabled' : ''}>
+                                    ${isCompleted ? 'Hoàn thành' : 'Hoàn thành'}
+                                </button>
+                                ${isCompleted ? `<button class="undo-btn" onclick="undoTask('${type}', '${task.id}')">↩️</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(taskEl);
+                });
+            });
+        }
+
+        // Update rewards
+        function updateRewards() {
+            const grid = document.getElementById('rewardGrid');
+            grid.innerHTML = '';
+            
+            rewards.forEach((reward, index) => {
+                const canAfford = gameState.playerGold >= reward.cost;
+                const card = document.createElement('div');
+                card.className = 'reward-card';
+                card.innerHTML = `
+                    <h4>${reward.name}</h4>
+                    <p>${reward.description}</p>
+                    <div class="reward-price">💰 ${reward.cost}</div>
+                    <button class="buy-btn" onclick="buyReward(${index})" ${!canAfford ? 'disabled' : ''}>
+                        ${canAfford ? 'Đổi thưởng' : 'Không đủ'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Update all levels
+        function updateAllLevels() {
+            const container = document.getElementById('allLevels');
+            container.innerHTML = '<div class="level-grid"></div>';
+            const grid = container.querySelector('.level-grid');
+            
+            levels.forEach(level => {
+                const isCurrentLevel = level.name === gameState.currentLevel;
+                const item = document.createElement('div');
+                item.className = `level-item ${isCurrentLevel ? 'current' : ''}`;
+                item.innerHTML = `
+                    <h4 style="font-size: 0.9em; margin-bottom: 5px;">${level.name}</h4>
+                    <div style="font-size: 0.8em;">${level.expRequired} XP</div>
+                    ${isCurrentLevel ? '<div style="margin-top: 5px; font-weight: bold;">⭐ Hiện tại</div>' : ''}
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        // Complete task
+        function completeTask(type, taskId) {
+            const task = tasks[type].find(t => t.id === taskId);
+            if (!task || gameState.completedTasks[type].includes(taskId)) return;
+            
+            const isBonusTask = (type === 'daily' && taskId === 'd7') || 
+                               (type === 'weekly' && taskId === 'w4') || 
+                               (type === 'monthly' && taskId === 'm4');
+            
+            if (isBonusTask) {
+                tasks[type].filter(t => t.id !== taskId).forEach(t => {
+                    if (!gameState.completedTasks[type].includes(t.id)) {
+                        gameState.completedTasks[type].push(t.id);
+                        applyTaskRewards(t);
+                    }
+                });
+            }
+            
+            gameState.completedTasks[type].push(taskId);
+            applyTaskRewards(task);
+            
+            checkAutoCompleteBonus(type);
+            
+            if (type === 'daily' && gameState.completedTasks.daily.length === tasks.daily.length) {
+                gameState.streakDays++;
+                showModal('🎉 Xuất sắc!', 'Hoàn thành tất cả nhiệm vụ ngày!');
+            }
+            
+            saveGameState();
+            updateUI();
+        }
+
+        // Apply task rewards
+        function applyTaskRewards(task) {
+            let expBonus = 0;
+            if (gameState.currentTitles.includes('discipline')) {
+                expBonus += 5;
+            }
+            gameState.playerExp += task.exp + expBonus;
+            gameState.playerGold += task.gold;
+        }
+
+        // Undo task
+        function undoTask(type, taskId) {
+            const task = tasks[type].find(t => t.id === taskId);
+            if (!task) return;
+            
+            const isBonusTask = (type === 'daily' && taskId === 'd7') || 
+                               (type === 'weekly' && taskId === 'w4') || 
+                               (type === 'monthly' && taskId === 'm4');
+            
+            if (isBonusTask) {
+                tasks[type].forEach(t => {
+                    if (gameState.completedTasks[type].includes(t.id)) {
+                        removeTaskRewards(t);
+                    }
+                });
+                gameState.completedTasks[type] = [];
+            } else {
+                const index = gameState.completedTasks[type].indexOf(taskId);
+                if (index > -1) {
+                    gameState.completedTasks[type].splice(index, 1);
+                    removeTaskRewards(task);
+                    
+                    const bonusTaskId = type === 'daily' ? 'd7' : (type === 'weekly' ? 'w4' : 'm4');
+                    const bonusIndex = gameState.completedTasks[type].indexOf(bonusTaskId);
+                    if (bonusIndex > -1) {
+                        gameState.completedTasks[type].splice(bonusIndex, 1);
+                        const bonusTask = tasks[type].find(t => t.id === bonusTaskId);
+                        if (bonusTask) removeTaskRewards(bonusTask);
+                    }
+                }
+            }
+            
+            saveGameState();
+            updateUI();
+        }
+
+        // Remove task rewards
+        function removeTaskRewards(task) {
+            let expBonus = 0;
+            if (gameState.currentTitles.includes('discipline')) {
+                expBonus += 5;
+            }
+            gameState.playerExp = Math.max(0, gameState.playerExp - (task.exp + expBonus));
+            gameState.playerGold = Math.max(0, gameState.playerGold - task.gold);
+        }
+
+        // Check auto complete bonus
+        function checkAutoCompleteBonus(type) {
+            const bonusTaskId = type === 'daily' ? 'd7' : (type === 'weekly' ? 'w4' : 'm4');
+            const bonusTask = tasks[type].find(t => t.id === bonusTaskId);
+            const otherTasks = tasks[type].filter(t => t.id !== bonusTaskId);
+            
+            const allOthersCompleted = otherTasks.every(t => 
+                gameState.completedTasks[type].includes(t.id)
+            );
+            
+            if (allOthersCompleted && !gameState.completedTasks[type].includes(bonusTaskId)) {
+                gameState.completedTasks[type].push(bonusTaskId);
+                applyTaskRewards(bonusTask);
+            }
+        }
+
+        // Buy reward
+        function buyReward(index) {
+            const reward = rewards[index];
+            if (gameState.playerGold >= reward.cost) {
+                gameState.playerGold -= reward.cost;
+                showModal('🎁 Thành công!', `Đã đổi: ${reward.name}`);
+                saveGameState();
+                updateUI();
+            }
+        }
+
+        // Check level up
+        function checkLevelUp() {
+            const currentIndex = levels.findIndex(l => l.name === gameState.currentLevel);
+            const nextLevel = levels[currentIndex + 1];
+            
+            if (nextLevel && gameState.playerExp >= nextLevel.expRequired) {
+                gameState.currentLevel = nextLevel.name;
+                document.querySelector('.info-card').classList.add('level-up-animation');
+                showModal('🎊 Thăng cấp!', `Đạt cấp độ ${nextLevel.name}!`);
+                saveGameState();
+            }
+        }
+
+        // Check title conditions
+        function checkTitleConditions() {
+            if (gameState.completedTasks.daily.length === tasks.daily.length) {
+                gameState.titleProgress.disciplineStreak++;
+                if (gameState.titleProgress.disciplineStreak >= 3 && !gameState.currentTitles.includes('discipline')) {
+                    gameState.currentTitles.push('discipline');
+                    showModal('🏆 Danh hiệu mới!', 'Chiến Binh Kỷ Luật!');
+                }
+            } else {
+                gameState.titleProgress.disciplineStreak = 0;
+            }
+        }
+
+        // Use skill
+        function useSkill(titleId, skillName) {
+            const title = titles.find(t => t.id === titleId);
+            const skill = title.skills.find(s => s.name === skillName);
+            showModal(`⚡ ${skillName}`, skill.effect);
+            
+            if (skillName === 'Giá trị nghệ thuật') {
+                gameState.playerGold += 5;
+                saveGameState();
+                updateUI();
+            }
+        }
+
+        // Switch tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.task-list').forEach(list => list.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}Tasks`).classList.add('active');
+        }
+
+        // Modal functions
+        function showModal(title, text) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Edit functions
+        function toggleEditTasks() {
+            const form = document.getElementById('editTasksForm');
+            form.classList.toggle('active');
+            if (form.classList.contains('active')) {
+                renderEditTasksForm();
+            }
+        }
+
+        function renderEditTasksForm() {
+            const form = document.getElementById('editTasksForm');
+            const currentTab = document.querySelector('.task-list.active').id.replace('Tasks', '');
+            
+            form.innerHTML = `
+                <h3>Sửa nhiệm vụ ${currentTab === 'daily' ? 'ngày' : (currentTab === 'weekly' ? 'tuần' : 'tháng')}</h3>
+                ${tasks[currentTab].map((task, index) => `
+                    <div class="form-group">
+                        <label>Nhiệm vụ ${index + 1}</label>
+                        <input type="text" id="task-name-${currentTab}-${index}" value="${task.name}">
+                        <textarea id="task-desc-${currentTab}-${index}" rows="2">${task.description}</textarea>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <input type="number" id="task-exp-${currentTab}-${index}" value="${task.exp}" style="width: 80px;">
+                            <input type="number" id="task-gold-${currentTab}-${index}" value="${task.gold}" style="width: 80px;">
+                        </div>
+                    </div>
+                `).join('')}
+                <div class="form-actions">
+                    <button class="save-btn" onclick="saveTaskEdits('${currentTab}')">Lưu</button>
+                    <button class="cancel-btn" onclick="toggleEditTasks()">Hủy</button>
+                </div>
+            `;
+        }
+
+        function saveTaskEdits(type) {
+            tasks[type].forEach((task, index) => {
+                task.name = document.getElementById(`task-name-${type}-${index}`).value;
+                task.description = document.getElementById(`task-desc-${type}-${index}`).value;
+                task.exp = parseInt(document.getElementById(`task-exp-${type}-${index}`).value) || 0;
+                task.gold = parseInt(document.getElementById(`task-gold-${type}-${index}`).value) || 0;
+            });
+            
+            localStorage.setItem('customTasks', JSON.stringify(tasks));
+            toggleEditTasks();
+            updateUI();
+            showModal('✅ Đã lưu', 'Thay đổi đã được lưu!');
+        }
+
+        function toggleEditRewards() {
+            const form = document.getElementById('editRewardsForm');
+            form.classList.toggle('active');
+            if (form.classList.contains('active')) {
+                renderEditRewardsForm();
+            }
+        }
+
+        function renderEditRewardsForm() {
+            const form = document.getElementById('editRewardsForm');
+            
+            form.innerHTML = `
+                <h3>Sửa phần thưởng</h3>
+                ${rewards.map((reward, index) => `
+                    <div class="form-group">
+                        <label>Thưởng ${index + 1}</label>
+                        <input type="text" id="reward-name-${index}" value="${reward.name}">
+                        <textarea id="reward-desc-${index}" rows="2">${reward.description}</textarea>
+                        <input type="number" id="reward-cost-${index}" value="${reward.cost}" style="margin-top: 5px;">
+                    </div>
+                `).join('')}
+                <div class="form-actions">
+                    <button class="save-btn" onclick="saveRewardEdits()">Lưu</button>
+                    <button class="cancel-btn" onclick="toggleEditRewards()">Hủy</button>
+                </div>
+            `;
+        }
+
+        function saveRewardEdits() {
+            rewards.forEach((reward, index) => {
+                reward.name = document.getElementById(`reward-name-${index}`).value;
+                reward.description = document.getElementById(`reward-desc-${index}`).value;
+                reward.cost = parseInt(document.getElementById(`reward-cost-${index}`).value) || 0;
+            });
+            
+            localStorage.setItem('customRewards', JSON.stringify(rewards));
+            toggleEditRewards();
+            updateUI();
+            showModal('✅ Đã lưu', 'Thay đổi đã được lưu!');
+        }
+
+        // Reset game with confirmation modal
+        let resetStep = 0;
+        
+        function resetGame() {
+            resetStep = 1;
+            showResetModal();
+        }
+        
+        function showResetModal() {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+            const content = document.querySelector('.modal-content');
+            
+            if (resetStep === 1) {
+                title.textContent = '⚠️ Cảnh báo!';
+                text.innerHTML = `
+                    <strong>Bạn có chắc chắn muốn khởi tạo lại toàn bộ dữ liệu?</strong><br><br>
+                    Tất cả những gì sẽ bị xóa:<br>
+                    • Cấp độ và kinh nghiệm<br>
+                    • Vàng và phần thưởng<br>
+                    • Danh hiệu đã đạt được<br>
+                    • Tiến độ nhiệm vụ<br>
+                    • Chuỗi ngày hoàn thành<br><br>
+                    <em>Hành động này không thể hoàn tác!</em>
+                `;
+                
+                // Replace close button with confirm/cancel buttons
+                const closeBtn = content.querySelector('.close-btn');
+                closeBtn.style.display = 'none';
+                
+                if (!content.querySelector('.reset-actions')) {
+                    const actions = document.createElement('div');
+                    actions.className = 'reset-actions';
+                    actions.style.cssText = 'display: flex; gap: 10px; margin-top: 20px;';
+                    actions.innerHTML = `
+                        <button class="cancel-btn" style="flex: 1; padding: 10px 20px; border-radius: 20px; border: none; background: #6c757d; color: white; font-size: 0.9em;" onclick="cancelReset()">Hủy bỏ</button>
+                        <button class="save-btn" style="flex: 1; padding: 10px 20px; border-radius: 20px; border: none; background: #dc3545; color: white; font-size: 0.9em;" onclick="confirmReset()">Tiếp tục</button>
+                    `;
+                    content.appendChild(actions);
+                }
+                
+            } else if (resetStep === 2) {
+                title.textContent = '⚠️ XÁC NHẬN LẦN CUỐI!';
+                text.innerHTML = `
+                    <strong style="color: #dc3545;">ĐÂY LÀ LẦN XÁC NHẬN CUỐI CÙNG!</strong><br><br>
+                    Nếu bạn nhấn "Xóa tất cả", toàn bộ dữ liệu sẽ bị xóa vĩnh viễn.<br><br>
+                    <strong>Bạn THỰC SỰ muốn xóa hết tất cả?</strong>
+                `;
+                
+                const actions = content.querySelector('.reset-actions');
+                if (actions) {
+                    actions.innerHTML = `
+                        <button class="cancel-btn" style="flex: 1; padding: 10px 20px; border-radius: 20px; border: none; background: #28a745; color: white; font-size: 0.9em;" onclick="cancelReset()">Không, giữ lại</button>
+                        <button class="save-btn" style="flex: 1; padding: 10px 20px; border-radius: 20px; border: none; background: #dc3545; color: white; font-size: 0.9em;" onclick="executeReset()">Xóa tất cả</button>
+                    `;
+                }
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function confirmReset() {
+            resetStep = 2;
+            showResetModal();
+        }
+        
+        function cancelReset() {
+            resetStep = 0;
+            closeModal();
+            // Restore normal modal
+            const content = document.querySelector('.modal-content');
+            const actions = content.querySelector('.reset-actions');
+            if (actions) {
+                actions.remove();
+            }
+            content.querySelector('.close-btn').style.display = 'block';
+        }
+        
+        function executeReset() {
+            // Reset all data
+            gameState = {
+                playerExp: 0,
+                playerGold: 0,
+                streakDays: 0,
+                currentLevel: 'Tân binh nhí',
+                currentTitles: [],
+                completedTasks: {
+                    daily: [],
+                    weekly: [],
+                    monthly: []
+                },
+                lastPlayDate: new Date().toDateString(),
+                titleProgress: {
+                    disciplineStreak: 0,
+                    creativeDays: 0,
+                    explorerWeek: false,
+                    knightHelps: true
+                }
+            };
+            
+            // Clear all localStorage
+            localStorage.removeItem('familyRPGState');
+            localStorage.removeItem('customTasks');
+            localStorage.removeItem('customRewards');
+            
+            // Reset tasks and rewards to default
+            tasks = {
+                daily: [
+                    { id: 'd1', name: 'Kỷ luật', description: 'Tuân thủ thời gian biểu', exp: 10, gold: 10 },
+                    { id: 'd2', name: 'Học tập', description: 'Học bài và làm bài tập', exp: 5, gold: 5 },
+                    { id: 'd3', name: 'Rèn luyện', description: 'Đọc sách/Vẽ/Giải đố', exp: 10, gold: 10 },
+                    { id: 'd4', name: 'Dọn dẹp', description: 'Dọn phòng, bàn học', exp: 5, gold: 5 },
+                    { id: 'd5', name: 'Giúp đỡ', description: 'Giúp việc nhà', exp: 10, gold: 10 },
+                    { id: 'd6', name: 'Trông em', description: 'Chơi với em 30 phút', exp: 5, gold: 5 },
+                    { id: 'd7', name: 'Thưởng chuỗi', description: 'Hoàn thành tất cả', exp: 5, gold: 5 }
+                ],
+                weekly: [
+                    { id: 'w1', name: 'Học nâng cao', description: 'Tự học kiến thức mới', exp: 10, gold: 10 },
+                    { id: 'w2', name: 'Luyện kỹ năng', description: 'Luyện tập 1 buổi', exp: 15, gold: 15 },
+                    { id: 'w3', name: 'Tự giác', description: 'Dọn nhà, chăm cây', exp: 20, gold: 20 },
+                    { id: 'w4', name: 'Thưởng tuần', description: 'Hoàn thành tất cả', exp: 10, gold: 10 }
+                ],
+                monthly: [
+                    { id: 'm1', name: 'Sáng tạo', description: 'Viết/vẽ điều đặc biệt', exp: 20, gold: 20 },
+                    { id: 'm2', name: 'Tự đánh giá', description: 'Đánh giá tiến độ', exp: 10, gold: 10 },
+                    { id: 'm3', name: 'Đọc sách', description: 'Đọc hết 1 cuốn', exp: 50, gold: 50 },
+                    { id: 'm4', name: 'Thưởng tháng', description: 'Hoàn thành tất cả', exp: 15, gold: 15 }
+                ]
+            };
+            
+            rewards = [
+                { name: 'Đồ chơi nhỏ', description: 'Sticker, kẹo', cost: 500 },
+                { name: 'Thời gian giải trí', description: '+20 phút game', cost: 500 },
+                { name: 'Bữa ăn yêu thích', description: 'Món ăn tùy chọn', cost: 500 },
+                { name: 'Xem phim', description: 'Một bộ phim dài', cost: 1000 },
+                { name: 'Đi chơi', description: 'Chuyến đi trong ngày', cost: 1000 },
+                { name: 'Ngủ cùng bố mẹ', description: 'Một đêm đặc biệt', cost: 1000 },
+                { name: 'Đồ chơi vừa', description: 'Truyện, gấu bông', cost: 1000 },
+                { name: 'Hoạt động cùng', description: 'Làm gì đó cùng nhau', cost: 1000 },
+                { name: 'Game/Đồ chơi lớn', description: 'Dưới 500k', cost: 3000 },
+                { name: 'Ngày đặc biệt', description: 'Chọn hoạt động cả ngày', cost: 5000 },
+                { name: 'Du lịch', description: 'Chuyến đi xa', cost: 7000 }
+            ];
+            
+            // Save and update
+            saveGameState();
+            updateUI();
+            
+            // Close modal and show success
+            cancelReset();
+            setTimeout(() => {
+                showModal('✅ Khởi tạo thành công!', 'Dữ liệu đã được khởi tạo lại. Chúc bạn có một khởi đầu mới tốt đẹp!');
+            }, 100);
+        }
+
+        // Check task resets
+        function checkTaskResets() {
+            const now = new Date();
+            const lastPlay = new Date(gameState.lastPlayDate);
+            
+            if (now.getDay() === 0 && lastPlay.getDay() !== 0) {
+                gameState.completedTasks.weekly = [];
+            }
+            
+            if (now.getMonth() !== lastPlay.getMonth()) {
+                gameState.completedTasks.monthly = [];
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGameState();
+            
+            // Prevent pull to refresh
+            document.body.addEventListener('touchmove', (e) => {
+                if (e.touches[0].clientY > 0) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+
+        // Auto-save
+        setInterval(saveGameState, 30000);
+    </script>
+</body>
+</html>
